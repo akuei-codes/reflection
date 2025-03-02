@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
 #-----------------------------------------------------------------------
-# testregoverviews.py
-# Author: Bob Dondero
+# testregdetails.py
+# Author: Bob Dondero (modified by you)
 #-----------------------------------------------------------------------
 
 import os
@@ -21,7 +21,7 @@ def parse_args():
     parser = argparse.ArgumentParser(
         description=
         "Test the Registrar's application's handling of " +
-        "class overviews requests")
+        "class details requests")
     parser.add_argument('program', metavar='program', type=str,
         help='the client program to run')
     parser.add_argument('host', metavar='host', type=str,
@@ -54,6 +54,7 @@ def exec_command(program, args):
 #-----------------------------------------------------------------------
 
 def main():
+
     program, host, port = parse_args()
 
     # Test case 1: Display help for the client program.
@@ -61,33 +62,34 @@ def main():
 
     prefix = host + ' ' + str(port) + ' '
 
-    # Test case 2: Basic valid request for COS department.
-    exec_command(program, prefix + '-d COS')
-
-    # Test case 3: Valid request with additional options.
-    exec_command(program, prefix + '-d COS -a qr -n 2 -t intro')
+    # Test case 2: Valid class request with a typical class number.
+    exec_command(program, prefix + '8321')
 
     # Additional Test Cases:
 
-    # Test case 4: Change department to MATH.
-    exec_command(program, prefix + '-d MATH')
+    # Test case 3: Request details for another valid class number.
+    exec_command(program, prefix + '1103')
 
-    # Test case 5: Test with different action and type.
-    exec_command(program, prefix + '-d COS -a detail -n 3 -t overview')
+    # Test case 4: Request details for a large class number.
+    exec_command(program, prefix + '99999')
 
-    # Test case 6: Test with only numeric option change.
-    exec_command(program, prefix + '-d COS -n 5')
+    # Test case 5: Request details for a very small class number.
+    exec_command(program, prefix + '1')
 
-    # Test case 7: Test with extra optional parameters.
-    exec_command(program, prefix + '-d COS -a summary -t full')
+    # Test case 6: Request details with a non-numeric class ID (invalid input).
+    exec_command(program, prefix + 'ABC123')
 
-    # Test case 8: An invalid test case to verify error handling.
-    # For example, an unsupported action (-a invalid) and a negative number (-n -1)
-    exec_command(program, prefix + '-d COS -a invalid -n -1 -t test')
+    # Test case 7: Request details for a negative class ID (invalid input).
+    exec_command(program, prefix + '-4321')
 
-if __name__ == '__main__':
-    main()
-#-----------------------------------------------------------------------
+    # Test case 8: Request details with a missing class ID (invalid input).
+    exec_command(program, prefix)
+
+    # Test case 9: Request multiple class details simultaneously.
+    exec_command(program, prefix + '8321 1103 2205')
+
+    # Test case 10: Request details for a class that does not exist.
+    exec_command(program, prefix + '0000')
 
 if __name__ == '__main__':
     main()

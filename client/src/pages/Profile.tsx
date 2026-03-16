@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
+import { assetUrl } from '../api';
 
 type ReviewItem = {
   id: string;
@@ -43,7 +44,7 @@ export default function Profile() {
 
   useEffect(() => {
     if (!id) return;
-    fetch(`/api/users/${id}`, { credentials: 'include' })
+    fetch(`${import.meta.env.VITE_API_URL || ''}/api/users/${id}`, { credentials: 'include' })
       .then((r) => {
         if (!r.ok) throw new Error('Not found');
         return r.json();
@@ -64,7 +65,7 @@ export default function Profile() {
     if (!me || isOwner) return;
     setVotingId(reviewId);
     try {
-      const res = await fetch(`/api/reviews/${reviewId}/vote`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/reviews/${reviewId}/vote`, {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
@@ -95,7 +96,7 @@ export default function Profile() {
     if (!confirmed) return;
     setDeleting(true);
     try {
-      const res = await fetch('/api/me', { method: 'DELETE', credentials: 'include' });
+      const res = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/me`, { method: 'DELETE', credentials: 'include' });
       const text = await res.text();
       const data = text ? (() => { try { return JSON.parse(text); } catch { return {}; } })() : {};
       if (!res.ok) {
@@ -116,7 +117,7 @@ export default function Profile() {
     if (!id) return;
     setSubmitting(true);
     try {
-      const res = await fetch('/api/reviews', {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/reviews`, {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
@@ -129,7 +130,7 @@ export default function Profile() {
       }
       setComment('');
       setRating(5);
-      const updated = await fetch(`/api/users/${id}`, { credentials: 'include' }).then((r) => r.json());
+      const updated = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/users/${id}`, { credentials: 'include' }).then((r) => r.json());
       setProfile(updated);
     } catch {
       setReviewError('Network error.');
@@ -173,7 +174,7 @@ export default function Profile() {
         <div className="flex flex-col sm:flex-row items-center gap-6 mb-6">
           <div className="w-32 h-32 rounded-3xl overflow-hidden bg-primary/10 dark:bg-primary/20 flex-shrink-0 shadow-card dark:shadow-dark-card">
             {profile.profile_picture ? (
-              <img src={profile.profile_picture} alt="" className="w-full h-full object-cover" />
+              <img src={assetUrl(profile.profile_picture)} alt="" className="w-full h-full object-cover" />
             ) : (
               <span className="w-full h-full flex items-center justify-center text-5xl text-primary/60 font-serif">
                 {profile.name?.[0] ?? '?'}

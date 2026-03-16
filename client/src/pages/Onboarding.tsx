@@ -42,7 +42,7 @@ export default function Onboarding() {
       formData.set('class_year', classYear);
       formData.set('residential_college', residentialCollege);
       if (photoFile) formData.set('profile_picture', photoFile);
-      const res = await fetch('/api/me/profile', {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/me/profile`, {
         method: 'PUT',
         credentials: 'include',
         body: formData

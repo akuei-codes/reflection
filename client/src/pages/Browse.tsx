@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import { assetUrl } from '../api';
 
 const CLASS_YEARS = ['2026', '2027', '2028', '2029'];
 const RESIDENTIAL_COLLEGES = ['Butler', 'NCW', 'Yeh', 'Forbes', 'Whitman', 'Mathey', 'Rockefeller'];
@@ -31,7 +32,7 @@ export default function Browse() {
     if (classYear) params.set('class_year', classYear);
     if (college) params.set('residential_college', college);
     setLoading(true);
-    fetch(`/api/users?${params}`)
+    fetch(`${import.meta.env.VITE_API_URL || ''}/api/users?${params}`)
       .then((r) => r.json())
       .then((data) => {
         setUsers(data);
@@ -40,7 +41,7 @@ export default function Browse() {
   }, [search, major, classYear, college]);
 
   useEffect(() => {
-    fetch('/api/options/majors').then((r) => r.json()).then(setMajorOptions);
+    fetch(`${import.meta.env.VITE_API_URL || ''}/api/options/majors`).then((r) => r.json()).then(setMajorOptions);
   }, []);
 
   const stars = (avg: number) => {
@@ -145,7 +146,7 @@ export default function Browse() {
                     <div className="aspect-square relative bg-primary/10 dark:bg-primary/20">
                       {u.profile_picture ? (
                         <img
-                          src={u.profile_picture}
+                          src={assetUrl(u.profile_picture)}
                           alt=""
                           className="w-full h-full object-cover"
                         />

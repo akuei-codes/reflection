@@ -52,6 +52,17 @@ A social self-awareness platform for Princeton students: anonymous feedback and 
 
    Log in via **Sign in with Princeton CAS** (requires Princeton NetID).
 
+## Deploy frontend on Vercel
+
+1. Push the repo to GitHub (e.g. `akuei-codes/reflection`).
+2. Go to [vercel.com](https://vercel.com) and sign in (e.g. with GitHub).
+3. **Add New Project** → **Import** your `reflection` repo.
+4. Leave **Root Directory** as `.` (repo root). Vercel will use `vercel.json`: build `client`, output `client/dist`.
+5. (Optional) Add **Environment Variable**: `VITE_API_URL` = your backend URL (e.g. `https://your-api.railway.app`) once the API is deployed. Leave blank to get a frontend-only preview.
+6. Click **Deploy**. Your app will be at **https://&lt;project-name&gt;.vercel.app** (or your custom domain).
+
+To deploy the **backend** (required for login and data), use [Railway](https://railway.app), [Render](https://render.com), or another Node host. Set `BASE_URL` to your Vercel URL and `API_URL` to the backend URL, then set `VITE_API_URL` on Vercel to that same backend URL.
+
 ## Production
 
 - Set `NODE_ENV=production`

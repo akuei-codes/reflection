@@ -42,7 +42,7 @@ export default function Login() {
   }, [user, loading, navigate]);
 
   const handleCasLogin = () => {
-    window.location.href = '/api/auth/cas/login';
+    window.location.href = `${import.meta.env.VITE_API_URL || ''}/api/auth/cas/login`;
   };
 
   if (loading) {

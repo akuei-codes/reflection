@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
+import { assetUrl } from '../api';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const { user, logout } = useAuth();
@@ -33,7 +34,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                   className="flex items-center gap-2 text-sm text-text-muted dark:text-gray-400 hover:text-primary dark:hover:text-primary-light transition"
                 >
                   {user.profile_picture ? (
-                    <img src={user.profile_picture} alt="" className="w-7 h-7 rounded-full object-cover" />
+                    <img src={assetUrl(user.profile_picture)} alt="" className="w-7 h-7 rounded-full object-cover" />
                   ) : (
                     <span className="w-7 h-7 rounded-full bg-primary/20 dark:bg-primary/30 flex items-center justify-center text-primary text-xs font-medium">
                       {user.name?.[0] ?? user.netid[0]}
